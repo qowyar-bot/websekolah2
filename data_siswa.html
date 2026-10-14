@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Siswa - Sistem Informasi Sekolah</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #f4f7f6; }
+        .sidebar { width: 250px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
+        .sidebar h2 { text-align: center; padding: 20px 0; background-color: #1a252f; border-bottom: 1px solid #34495e; }
+        .sidebar ul { list-style: none; padding-top: 10px; }
+        .sidebar ul li { padding: 15px 20px; border-bottom: 1px solid #34495e; }
+        .sidebar ul li a { color: white; text-decoration: none; font-size: 16px; display: block; }
+        .sidebar ul li:hover, .active-menu { background-color: #3498db; cursor: pointer; }
+        .main-content { flex: 1; display: flex; flex-direction: column; }
+        .header { background-color: white; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .content { padding: 20px; overflow-y: auto; }
+        .card { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        table th, table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        table th { background-color: #f8f9fa; color: #333; }
+        .btn-tambah { padding: 10px 15px; background: #2ecc71; color: white; text-decoration: none; border-radius: 4px; display: inline-block; }
+        .btn-edit { background: #f39c12; color: white; padding: 5px 10px; border-radius: 3px; text-decoration: none; font-size: 14px; }
+        .btn-hapus { background: #e74c3c; color: white; padding: 5px 10px; border-radius: 3px; text-decoration: none; font-size: 14px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>SiSekolah</h2>
+        <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li class="active-menu"><a href="data_siswa.html">Data Siswa</a></li>
+            <li><a href="data_guru.html">Data Guru</a></li>
+            <li><a href="jadwal.html">Jadwal Pelajaran</a></li>
+            <li><a href="nilai.html">Rekap Nilai</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header"><h3>Data Master</h3></div>
+        <div class="content">
+            <h2>Data Siswa</h2><br>
+            <div class="card">
+                <a href="tambah_siswa.html" class="btn-tambah">+ Tambah Siswa</a>
+                <table>
+                    <thead>
+                        <tr><th>No</th><th>NISN</th><th>Nama Lengkap</th><th>L/P</th><th>Kelas</th><th>Aksi</th></tr>
+                    </thead>
+                    <tbody id="tabelSiswa">
+                        <!-- Data statis bawaan -->
+                        <tr><td>1</td><td>0051234567</td><td>Budi Santoso</td><td>L</td><td>X IPA 1</td><td><a href="#" class="btn-edit">Edit</a> <button class="btn-hapus" onclick="hapusBawaan(this)">Hapus</button></td></tr>
+                        <tr><td>2</td><td>0057654321</td><td>Siti Aminah</td><td>P</td><td>X IPA 1</td><td><a href="#" class="btn-edit">Edit</a> <button class="btn-hapus" onclick="hapusBawaan(this)">Hapus</button></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dataSiswa = JSON.parse(localStorage.getItem('dataSiswaBaru')) || [];
+        let tbody = document.getElementById('tabelSiswa');
+        let nomorAwal = 3;
+
+        // Tampilkan data yang ditambahkan dari form
+        dataSiswa.forEach((siswa, index) => {
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${nomorAwal + index}</td>
+                <td>${siswa.nisn}</td>
+                <td>${siswa.nama}</td>
+                <td>${siswa.jk}</td>
+                <td>${siswa.kelas}</td>
+                <td><a href="#" class="btn-edit">Edit</a> <button class="btn-hapus" onclick="hapusDataSiswa(${index})">Hapus</button></td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // Fungsi hapus data yang dari form
+        function hapusDataSiswa(index) {
+            if(confirm('Yakin ingin menghapus data siswa ini?')) {
+                dataSiswa.splice(index, 1);
+                localStorage.setItem('dataSiswaBaru', JSON.stringify(dataSiswa));
+                location.reload();
+            }
+        }
+
+        // Fungsi hapus data bawaan (statis)
+        function hapusBawaan(button) {
+            if(confirm('Yakin ingin menghapus data siswa ini?')) {
+                let row = button.closest('tr');
+                row.remove();
+            }
+        }
+    </script>
+</body>
+</html>

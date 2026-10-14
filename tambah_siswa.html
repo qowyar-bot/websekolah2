@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tambah Siswa - Sistem Informasi Sekolah</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { display: flex; height: 100vh; background-color: #f4f7f6; }
+        .sidebar { width: 250px; background-color: #2c3e50; color: white; display: flex; flex-direction: column; }
+        .sidebar h2 { text-align: center; padding: 20px 0; background-color: #1a252f; border-bottom: 1px solid #34495e; }
+        .sidebar ul { list-style: none; padding-top: 10px; }
+        .sidebar ul li { padding: 15px 20px; border-bottom: 1px solid #34495e; }
+        .sidebar ul li a { color: white; text-decoration: none; font-size: 16px; display: block; }
+        .sidebar ul li:hover, .active-menu { background-color: #3498db; cursor: pointer; }
+        .main-content { flex: 1; display: flex; flex-direction: column; }
+        .header { background-color: white; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); display: flex; justify-content: space-between; align-items: center; }
+        .content { padding: 20px; overflow-y: auto; }
+        .card { background-color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); max-width: 500px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: bold;}
+        .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-simpan { padding: 10px 15px; background: #3498db; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 14px;}
+        .btn-batal { padding: 10px 15px; background: #e74c3c; color: white; text-decoration: none; border-radius: 4px; margin-left: 10px; font-size: 14px;}
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>SiSekolah</h2>
+        <ul>
+            <li><a href="index.html">Dashboard</a></li>
+            <li class="active-menu"><a href="data_siswa.html">Data Siswa</a></li>
+            <li><a href="data_guru.html">Data Guru</a></li>
+            <li><a href="jadwal.html">Jadwal Pelajaran</a></li>
+            <li><a href="nilai.html">Rekap Nilai</a></li>
+        </ul>
+    </div>
+    <div class="main-content">
+        <div class="header"><h3>Data Master</h3></div>
+        <div class="content">
+            <h2>Form Tambah Siswa</h2><br>
+            <div class="card">
+                <div class="form-group"><label>NISN</label><input type="text" id="nisn" placeholder="Masukkan NISN"></div>
+                <div class="form-group"><label>Nama Lengkap</label><input type="text" id="nama" placeholder="Masukkan Nama"></div>
+                <div class="form-group">
+                    <label>Jenis Kelamin</label>
+                    <select id="jk">
+                        <option value="L">L</option>
+                        <option value="P">P</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Kelas</label>
+                    <select id="kelas">
+                        <option value="X IPA 1">X IPA 1</option>
+                        <option value="XI IPS 2">XI IPS 2</option>
+                    </select>
+                </div>
+                <button type="button" onclick="simpanSiswa()" class="btn-simpan">Simpan Data</button>
+                <a href="data_siswa.html" class="btn-batal">Batal</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function simpanSiswa() {
+            const nisn = document.getElementById('nisn').value;
+            const nama = document.getElementById('nama').value;
+            const jk = document.getElementById('jk').value;
+            const kelas = document.getElementById('kelas').value;
+
+            if(!nisn || !nama) {
+                alert('NISN dan Nama wajib diisi ya!');
+                return;
+            }
+
+            let dataSiswa = JSON.parse(localStorage.getItem('dataSiswaBaru')) || [];
+            dataSiswa.push({ nisn, nama, jk, kelas });
+            localStorage.setItem('dataSiswaBaru', JSON.stringify(dataSiswa));
+
+            window.location.href = 'data_siswa.html';
+        }
+    </script>
+</body>
+</html>
